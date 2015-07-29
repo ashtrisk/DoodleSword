@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">DoodleSword</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_teacher">TeacherActivity</string>
+
+    <string-array name="sub_list" >
+        <item>Goals</item>
+        <item>Curriculum</item>
+        <item>Performance</item>
+        <item>Location Tracker</item>
+        <item>Interact</item>
+        <item>Do Some Stuff</item>
+    </string-array>
+
+    <string-array name="teacher_items">
+        <item>Goals</item>
+        <item>Curriculum</item>
+        <item>Assessment</item>
+        <item>Attendance</item>
+        <item>Interact</item>
+        <item>Do some stuff</item>
+    </string-array>
+
+    <string-array name="placeholder_list">
+        <item>New Habit</item>
+        <item>Start Date</item>
+        <item>End Date</item>
+        <item>Reminder</item>
+        <item>Target</item>
+        <item>Assign to Group</item>
+        <item>Alarm</item>
+    </string-array>
+
+    <string name="title_activity_parent">ParentActivity</string>
+    <string name="title_activity_goals">GoalsActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_goal">GoalActivity</string>
+    <string name="title_activity_curriculum">Curriculum</string>
+    <string name="title_activity_assessment">Assessment</string>
+    <string name="title_activity_attendance">Attendance</string>
+    <string name="title_activity_interact">Interact</string>
+    <string name="title_activity_location_tracker">LocationTracker</string>
+    <string name="title_activity_student_curriculum">StudentCurriculum</string>
+    <string name="title_activity_location">Map</string>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="classes" >
+        <item>class 5</item>
+        <item>class 6</item>
+        <item>class 7</item>
+        <item>class 8</item>
+    </string-array>
+    <string-array name="subjects">
+        <item>science</item>
+        <item>mathematics</item>
+        <item>social science</item>
+        <item>Drawing</item>
+        <item>Moral science</item>
+        <item>computer science</item>
+        <item>sports</item>
+    </string-array>
+    <string-array name="units_science_class5">
+        <item>Chemical Science</item>
+        <item>Motion</item>
+        <item>Light</item>
+        <item>Human Body</item>
+        <item>Plant Life</item>
+    </string-array>
+    <string-array name="units_math_class5">
+        <item>Number system</item>
+        <item>Surface Area</item>
+        <item>Time and Distance</item>
+        <item>Probability</item>
+        <item>Shapes and Sizes</item>
+    </string-array>
+</resources>

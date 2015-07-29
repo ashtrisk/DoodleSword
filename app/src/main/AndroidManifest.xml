@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ashutosh.doodlesword" >
+
+    <!-- INTERNET/ACCESS_NETWORK_STATE permissions are required to fetch current location and to show it on google maps -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- READ_GSERVICES permission required to read google play services, in our case user's location services -->
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
+    <!-- The ACCESS_COARSE_LOCATION/ACCESS_FINE_LOCATION are used to access user location -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TeacherActivity"
+            android:label="@string/title_activity_teacher"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ashutosh.doodlesword.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ParentActivity"
+            android:label="@string/title_activity_parent"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ashutosh.doodlesword.MainActivity" />
+        </activity>
+        <activity
+            android:name=".GoalsActivity"
+            android:label="@string/title_activity_goal"
+            android:parentActivityName=".TeacherActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ashutosh.doodlesword.TeacherActivity" />
+        </activity>
+        <activity
+            android:name=".TeacherCurriculum"
+            android:label="@string/title_activity_curriculum"
+            android:parentActivityName=".TeacherActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ashutosh.doodlesword.TeacherActivity" />
+        </activity>
+        <activity
+            android:name=".Assessment"
+            android:label="@string/title_activity_assessment"
+            android:parentActivityName=".TeacherActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ashutosh.doodlesword.TeacherActivity" />
+        </activity>
+        <activity
+            android:name=".Attendance"
+            android:label="@string/title_activity_attendance"
+            android:parentActivityName=".TeacherActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ashutosh.doodlesword.TeacherActivity" />
+        </activity>
+        <activity
+            android:name=".Interact"
+            android:label="@string/title_activity_interact"
+            android:parentActivityName=".TeacherActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ashutosh.doodlesword.TeacherActivity" />
+        </activity>
+        <activity
+            android:name=".LocationTracker"
+            android:label="@string/title_activity_location_tracker"
+            android:parentActivityName=".ParentActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ashutosh.doodlesword.ParentActivity" />
+        </activity>
+        <activity
+            android:name=".StudentCurriculum"
+            android:label="@string/title_activity_student_curriculum"
+            android:parentActivityName=".ParentActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ashutosh.doodlesword.ParentActivity" />
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".LocationActivity"
+            android:label="@string/title_activity_location" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ashutosh.doodlesword.ParentActivity" />
+        </activity>
+    </application>
+
+</manifest>
