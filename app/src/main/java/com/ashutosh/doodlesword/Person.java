@@ -20,7 +20,7 @@ public class Person extends DoodleRecylerViewSetter {
         txt.setText(text);
         txt.setTextSize(50);
         txt.setMinHeight(40);
-        
+
         txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
