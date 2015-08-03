@@ -1,13 +1,18 @@
 package com.ashutosh.doodlesword;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.io.InputStream;
 
 /**
  * Created by Vostro-Daily on 7/28/2015.
@@ -61,6 +66,45 @@ public class ViewProvider {
         mImageButton.setImageResource(resId);
 //        mImageButton.setLayoutParams();
         return mImageButton;
+    }
+
+    public static ImageView getAssetImageView(Context context,String assetName,int minWidth,int minHeight,int maxWidth,int maxHeight,ViewGroup.LayoutParams params,ImageView.ScaleType scaleType){
+        ImageView mImage = new ImageView(context);
+        try {
+            InputStream ims = context.getAssets().open(assetName);
+            Drawable d = Drawable.createFromStream(ims, null);
+            mImage.setImageDrawable(d);
+            mImage.setScaleType(scaleType);
+            mImage.setMinimumWidth(minWidth);
+            mImage.setMinimumHeight(minHeight);
+            mImage.setMaxWidth(maxWidth);
+            mImage.setMaxHeight(maxHeight);
+            mImage.setLayoutParams(params);
+            return mImage;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static EditText getEditText(Context context,String placeholder,int minWidth,int minHeight,int maxWidth,int maxHeight,ViewGroup.LayoutParams params){
+        EditText mEditText = new EditText(context);
+        mEditText.setHint(placeholder);
+        mEditText.setMinimumHeight(minHeight);
+        mEditText.setMinimumWidth(minWidth);
+        mEditText.setMaxHeight(maxHeight);
+        mEditText.setMaxWidth(maxWidth);
+        mEditText.setLayoutParams(params);
+        return mEditText;
+    }
+
+    public static EditText getEditText(Context context,String placeholder,int minWidth,int minHeight,int maxWidth,int maxHeight){
+        EditText mEditText = new EditText(context);
+        mEditText.setHint(placeholder);
+        mEditText.setMinimumHeight(minHeight);
+        mEditText.setMinimumWidth(minWidth);
+        mEditText.setMaxHeight(maxHeight);
+        mEditText.setMaxWidth(maxWidth);
+        return mEditText;
     }
 }
 
