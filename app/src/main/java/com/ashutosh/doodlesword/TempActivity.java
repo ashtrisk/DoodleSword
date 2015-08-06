@@ -1,9 +1,11 @@
 package com.ashutosh.doodlesword;
 
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.view.Display;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ public class TempActivity extends FragmentActivity {
     TempPagerAdapter mPagerAdapter;
     ArrayList<Fragment> frags;
     ViewPager mViewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,9 +25,13 @@ public class TempActivity extends FragmentActivity {
         this.setRequestedOrientation(1);
         if(savedInstanceState == null) {
             frags = new ArrayList<>();
-            TempFragment t1 = new TempFragment();
+            TempLoginFragment t1 = new TempLoginFragment();
             Bundle args1 = new Bundle();
-            args1.putString("curr_text", "First Page");
+            Display display = getWindowManager().getDefaultDisplay();
+            final Point size = new Point();
+            display.getSize(size);
+            args1.putInt("LoginPageWidth", size.x);
+            args1.putInt("LoginPageHeight", size.y);
             t1.setArguments(args1);
             frags.add(t1);
             mPagerAdapter = new TempPagerAdapter(frags, getSupportFragmentManager());
@@ -38,12 +45,27 @@ public class TempActivity extends FragmentActivity {
         }
     }
 
-    public void addPage() {
-        TempFragment t = new TempFragment();
+    public void addPage(String username, String title) {
+//        TempFragment t = new TempFragment();
         Bundle args = new Bundle();
-        args.putString("curr_text", "Second Page");
-        t.setArguments(args);
-        frags.add(t);
+        args.putString("username", username);
+//        args.putString("title", title);
+//        t.setArguments(args);
+//        frags.add(t);
+
+        if(title.equalsIgnoreCase("student")){
+            TempStudentFragment tsf = new TempStudentFragment();
+            tsf.setArguments(args);
+            frags.add(tsf);
+        } else if(title.equalsIgnoreCase("teacher")){
+            // create teacher temp fragment
+        }
+
         mPagerAdapter.notifyDataSetChanged();
+    }
+
+    public void addAndGotoPage(String s, String s1) {
+        addPage(s,s1);
+        mViewPager.setCurrentItem(mPagerAdapter.getCount()-1);
     }
 }
