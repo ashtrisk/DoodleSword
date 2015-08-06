@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * Created by Vostro-Daily on 7/28/2015.
@@ -25,6 +26,16 @@ public class ViewProvider {
     public static TextView mTextView;
     public  static Button mButton;
     public static ImageButton mImageButton;
+    public static final String[][] user_data= { {"saty","yad","management","1"} , {"trina","das","teacher","2"} , {"ashu","chamoli","student","3"}};
+
+    public static String[] getUser(String str1,String str2){
+        for (String[] item:user_data){
+            if(str1.equals(item[0]) && str2.equals(item[1])){
+                return item;
+            }
+        }
+        return null;
+    }
 
     public static RelativeLayout getRelativeLayout(Context context){
         mRelativeLayout = new RelativeLayout(context);
@@ -88,11 +99,13 @@ public class ViewProvider {
 
     public static EditText getEditText(Context context,String placeholder,int minWidth,int minHeight,int maxWidth,int maxHeight,ViewGroup.LayoutParams params){
         EditText mEditText = new EditText(context);
+        float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
         mEditText.setHint(placeholder);
         mEditText.setMinimumHeight(minHeight);
         mEditText.setMinimumWidth(minWidth);
         mEditText.setMaxHeight(maxHeight);
         mEditText.setMaxWidth(maxWidth);
+        mEditText.setTextSize(maxHeight/(2*scaledDensity));
         mEditText.setLayoutParams(params);
         return mEditText;
     }
@@ -104,6 +117,7 @@ public class ViewProvider {
         mEditText.setMinimumWidth(minWidth);
         mEditText.setMaxHeight(maxHeight);
         mEditText.setMaxWidth(maxWidth);
+        mEditText.setTextSize(maxHeight);
         return mEditText;
     }
 }
