@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -31,17 +32,20 @@ public class LoginFormActivity extends Activity {
     private int usableHeightPrevious;
     private FrameLayout.LayoutParams frameLayoutParams;
     private View mChildOfContent;
+    private DynamicListAdapter dla;
+    private EditText et1,et2;
+    private boolean et1Focus,et2Focus;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+        //this.setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
         FrameLayout content = (FrameLayout) this.findViewById(android.R.id.content);
         //this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN + WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        //ScrollView sv = new ScrollView(this);
+        ScrollView sv = new ScrollView(this);
         Display display = this.getWindowManager().getDefaultDisplay();
         final Point size = new Point();
         display.getSize(size);
-        ListView lv = new ListView(this);
+        //ListView lv = new ListView(this);
         //RelativeLayout rl1 = new RelativeLayout(this);
         //FrameLayout.LayoutParams flp = new FrameLayout.LayoutParams(size.x,size.y);
         //LinearLayout l1 = new LinearLayout(this);
@@ -50,7 +54,7 @@ public class LoginFormActivity extends Activity {
         //sv.setLayoutParams(vlp);
         //sv.setVerticalScrollBarEnabled(true);
         //sv.setLayoutParams(vlp);
-        //ScrollView.LayoutParams slp = new ScrollView.LayoutParams(size.x,size.y);
+        FrameLayout.LayoutParams slp = new FrameLayout.LayoutParams(size.x,size.y);
         //rl2.setLayoutParams(new ViewGroup.LayoutParams(size.x,size.y));
         ImageView img2 = new ImageView(this);
         try {
@@ -79,16 +83,30 @@ public class LoginFormActivity extends Activity {
             RelativeLayout.LayoutParams rlp6 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
             RelativeLayout.LayoutParams rlp7 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
             rlp7.topMargin = size.y/12;
-            EditText et1 = ViewProvider.getEditText(this,"Login ID",size.x/2,size.y/15,size.x/2,size.y/15);
-            EditText et2 = ViewProvider.getEditText(this,"Password",size.x/2,size.y/15,size.x/2,size.y/15);
+            et1 = ViewProvider.getEditText(this,"Login ID",size.x/2,size.y/15,size.x/2,size.y/15);
+            et2 = ViewProvider.getEditText(this,"Password",size.x/2,size.y/15,size.x/2,size.y/15);
             et2.setTransformationMethod(new PasswordTransformationMethod());
+            et1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        //Toast.makeText(v.getContext(),"In Focus"+((LoginFormActivity)v.getContext()).computeUsableHeight(),Toast.LENGTH_LONG).show();
+                        et1Focus = true;
+                    } else {
+                        et1Focus = false;
+                        //Toast.makeText(v.getContext(),"Not In Focus"+((LoginFormActivity)v.getContext()).computeUsableHeight(),Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
             et2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if(hasFocus){
-                        //Toast.makeText(v.getContext(),"In Focus",Toast.LENGTH_LONG).show();
+                        //Toast.makeText(v.getContext(),"In Focus"+((LoginFormActivity)v.getContext()).computeUsableHeight(),Toast.LENGTH_LONG).show();
+                        et2Focus = true;
                     } else {
-                        //Toast.makeText(v.getContext(),"Not In Focus",Toast.LENGTH_LONG).show();
+                        et2Focus = false;
+                        //Toast.makeText(v.getContext(),"Not In Focus"+((LoginFormActivity)v.getContext()).computeUsableHeight(),Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -148,13 +166,16 @@ public class LoginFormActivity extends Activity {
         //l1.addView(rl3);
         //sv.addView(l1);
         //rl1.addView(sv);
-        ArrayList<View> views = new ArrayList<>();
-        views.add(rl2);
-        views.add(rl3);
-        lv.setAdapter(new DynamicListAdapter(views,this));
-        setContentView(lv);
-        mChildOfContent = content.getChildAt(0);
-        mChildOfContent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        //ArrayList<View> views = new ArrayList<>();
+        //views.add(rl2);
+        //views.add(rl3);
+        //dla = new DynamicListAdapter(views, this);
+        //lv.setAdapter(dla);
+        sv.addView(rl2);
+        setContentView(sv);
+        mChildOfContent = sv;
+        //lv.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
+        img2.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             public void onGlobalLayout() {
                 //Toast.makeText(mChildOfContent.getContext(), "In Focus", Toast.LENGTH_LONG).show();
                 possiblyResizeChildOfContent();
@@ -170,13 +191,36 @@ public class LoginFormActivity extends Activity {
             int heightDifference = usableHeightSansKeyboard - usableHeightNow;
             if (heightDifference > (usableHeightSansKeyboard/4)) {
                 // keyboard probably just became visible
+                RelativeLayout rl3 = new RelativeLayout(this);
+                rl3.setLayoutParams(new ScrollView.LayoutParams(100, 100));
+                //dla.setItem(rl3,1);
                 frameLayoutParams.height = usableHeightSansKeyboard - heightDifference;
+                mChildOfContent.requestLayout();
             } else {
                 // keyboard probably just became hidden
+//                if(et2Focus){
+//                    et2.requestFocus();
+//                }
+//                try {
+//                    //dla.removeItem(1);
+//                }catch (Exception e){
+//
+//                }
                 frameLayoutParams.height = usableHeightSansKeyboard;
+                mChildOfContent.requestLayout();
             }
-            mChildOfContent.requestLayout();
+            //mChildOfContent.requestLayout();
             usableHeightPrevious = usableHeightNow;
+        }
+        if(et2Focus){
+            //Toast.makeText(this,"In Focus"+computeUsableHeight(),Toast.LENGTH_LONG).show();
+            //et2Focus = false;
+            et2.requestFocus();
+        }
+        if(et1Focus){
+            //Toast.makeText(this,"In Focus"+computeUsableHeight(),Toast.LENGTH_LONG).show();
+            //et2Focus = false;
+            et1.requestFocus();
         }
     }
 

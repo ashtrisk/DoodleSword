@@ -53,4 +53,16 @@ public class DynamicListAdapter extends BaseAdapter {
 
         return (View)convertView;
     }
+
+    public void setItem(View v,int position){
+        views.add(position,v);
+        this.count = views.size();
+        this.notifyDataSetChanged();
+    }
+
+    public void removeItem(int position){
+        views.remove(position);
+        this.count = views.size();
+        this.notifyDataSetChanged();
+    }
 }
