@@ -6,10 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -24,19 +21,19 @@ public class TempFragment extends Fragment {
         LinearLayout rl = new LinearLayout(container.getContext());
         TextView txt = new TextView(container.getContext());
         Bundle arg = getArguments();
-        txt.setText(arg.getString("curr_text"));
+        txt.setText(arg.getString("username")+" "+arg.getString("title"));
         //EditText et = new EditText(container.getContext());
         //et.setHint("Hey");
-        Button bt = new Button(container.getContext());
-        bt.setText("Add Page");
-        bt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((TempActivity)v.getContext()).addPage();
-            }
-        });
+//        Button bt = new Button(container.getContext());
+//        bt.setText("Add Page");
+//        bt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ((TempActivity)v.getContext()).addPage();
+//            }
+//        });
         rl.addView(txt);
-        rl.addView(bt);
+//        rl.addView(bt);
         return rl;
     }
 
