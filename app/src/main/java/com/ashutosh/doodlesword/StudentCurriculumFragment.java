@@ -36,6 +36,7 @@ public class StudentCurriculumFragment extends Fragment {
                                             // and popped off when previous view is being fetched
     private DataBaseHelper dbHelper;    // reads json string from the database, and helps to parse it
     private ArrayList<View> views;
+    private Context context;
 
     public StudentCurriculumFragment() {
         // Required empty public constructor
@@ -94,6 +95,7 @@ public class StudentCurriculumFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_curriculum, container, false);
 
+        context = getActivity();
         stack = new Stack<>();      // creating a new stack
         // read json file from the assets directory
         json = null;
@@ -109,7 +111,7 @@ public class StudentCurriculumFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(json);
                 JSONObject list = jsonObject.getJSONObject("list");
                 JSONArray jsonArray = list.getJSONArray("items");
-                String studentClass = jsonArray.getString(0);   // gets the item at 0th place i.e. class of student
+                String studentClass = jsonArray.getString(0);   // gets the item at 0th place i.e. class of student class can be 0, 1 or some other no...
                 JSONObject classObject = list.getJSONObject(studentClass);
                 json = classObject.toString();
             }catch (JSONException ex){
@@ -122,10 +124,10 @@ public class StudentCurriculumFragment extends Fragment {
             return null;
         }
 
-        uri = "/";  // start of uri .... represents the list of classes
+        uri = "/";  // start of uri .... represents the list of classes or list of subjects in case of students
         mList = new ArrayList<>();
         dbHelper = new DataBaseHelper();
-        mList = dbHelper.fetchList(uri); // fetches the list of subjects
+        mList = dbHelper.fetchList(uri); // fetches the list of subjects in this case (Student)
         if(savedInstanceState != null) {
             mList = savedInstanceState.getStringArrayList("list");
         }
@@ -133,15 +135,13 @@ public class StudentCurriculumFragment extends Fragment {
         views = new ArrayList<>();
 
         // creating listView dynamically
-        mListView = new ListView(getActivity());
+        mListView = new ListView(context);
         mListView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         mListView.setMinimumHeight(200);
 
         ViewGroup frameLayout = (ViewGroup)rootView.findViewById(R.id.frame_layout_curriculum);     // the viewGroup is a frameLayout
         frameLayout.addView(mListView);
-
-        Context context = getActivity();
 
         TextView textView;
         for(String item : mList){   // create a textView for each item in the list and add to views
@@ -150,7 +150,7 @@ public class StudentCurriculumFragment extends Fragment {
             views.add(textView);
         }
 
-        mAdapter = new ArrayAdapter<>(getActivity(),
+        mAdapter = new ArrayAdapter<>(context,
                 android.R.layout.simple_list_item_1, mList);
 
         mListView.setAdapter(mAdapter);

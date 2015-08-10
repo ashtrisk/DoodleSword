@@ -3,13 +3,19 @@ package com.ashutosh.doodlesword;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,18 +32,18 @@ import java.util.Stack;
 public class TeacherCurriculumFragment extends Fragment {
 
     private Context mContext;
-    private ListView mListView;         // listView defined in the xml
+    private RecyclerView mRecycleView;         // listView defined in the xml
     private ArrayList<String> mList;    // current list of items
 //    private ArrayList<String> classes, subjects, units, sections, subSections, topics, topic1, topic2;
 //    private ArrayAdapter mAdapter;
-    private DynamicListAdapter mAdapter;
+    private DoodleRecyclerViewAdapter<Person11> mAdapter;
     private String json;                // json string fetched from file
     public String uri;                  // the uri for the current view item list in the database or in the json tree
     public Stack<String> stack;         // elements or uri parameters are pushed on to the stack when next view is reqd.
                                                 // and popped off when previous view is being fetched
     private DataBaseHelper dbHelper;    // reads json string from the database, and helps to parse it
-    public ArrayList<View> views;
-
+//    public ArrayList<View> views;
+    ArrayList<Person11> curriculumItemList;
 
     public TeacherCurriculumFragment() {
         // Required empty public constructor
@@ -57,12 +63,18 @@ public class TeacherCurriculumFragment extends Fragment {
 
 //        mAdapter.clear();
 //        mAdapter.addAll(mList);
-        views.clear();  // clear views list
+//        views.clear();  // clear views list
         // create a new views list
-        for(String item : mList)
-            views.add(getTextView(item));
+        curriculumItemList.clear();
+        for(String item : mList) {
+//            views.add(getTextView(item));
+            Person11 p = new Person11(item);
+            curriculumItemList.add(p);
+        }
         // pass the new views list to dynamicListAdapter
-        mAdapter = new DynamicListAdapter(views, mContext);
+//        mAdapter = new DynamicListAdapter(views, mContext);
+        mAdapter = new DoodleRecyclerViewAdapter<>(curriculumItemList);
+        mRecycleView.setAdapter(mAdapter);
 
         return true;
     }
@@ -88,10 +100,15 @@ public class TeacherCurriculumFragment extends Fragment {
         if(savedInstanceState != null){
             ArrayList<String> list = savedInstanceState.getStringArrayList("list");
 //            mAdapter.clear();
-            views.clear();
-            for(String item : list)
-                views.add(getTextView(item));
-            mAdapter = new DynamicListAdapter(views, mContext);
+//            views.clear();
+            curriculumItemList.clear();
+            for(String item : list) {
+//                views.add(getTextView(item));
+                Person11 p = new Person11(item);
+                curriculumItemList.add(p);
+            }
+//            mAdapter = new DynamicListAdapter(views, mContext);
+            mAdapter = new DoodleRecyclerViewAdapter<>(curriculumItemList);
         }
     }
 
@@ -102,7 +119,7 @@ public class TeacherCurriculumFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_curriculum, container, false);
@@ -110,7 +127,8 @@ public class TeacherCurriculumFragment extends Fragment {
         // initialization stuff here
         mContext = getActivity();
         stack = new Stack<>();      // creating a new stack
-        views = new ArrayList<>();
+//        views = new ArrayList<>();
+        curriculumItemList = new ArrayList<>();
         // read json file from the assets directory
         json = null;
         try {
@@ -192,63 +210,124 @@ public class TeacherCurriculumFragment extends Fragment {
 //        units_science_class5 = new ArrayList<>(Arrays.asList(resources.getStringArray(R.array.units_science_class5)));
 //        units_math_class5 = new ArrayList<>(Arrays.asList(resources.getStringArray(R.array.units_math_class5)));
 
-       // mListView = (ListView) rootView.findViewById(R.id.listView_curriculum);
+       // mRecycleView = (ListView) rootView.findViewById(R.id.listView_curriculum);
         // creating listView dynamically
-        mListView = new ListView(mContext);
-        mListView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-        mListView.setMinimumHeight(200);
+        mRecycleView = new RecyclerView(mContext);
+//        mRecycleView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+//                ViewGroup.LayoutParams.WRAP_CONTENT));
+//        mRecycleView.setMinimumHeight(200);
 
         // create a textView for each item in the list and add to views
-        for (String item : mList){
-            views.add(getTextView(item));
-        }
+//        for (String item : mList){
+//            views.add(getTextView(item));
+//        }
 
 //        mAdapter = new ArrayAdapter<>(getActivity(),
 //                    android.R.layout.simple_list_item_1, mList);
-        mAdapter = new DynamicListAdapter(views, mContext);
+        //mAdapter = new DynamicListAdapter(views, mContext);
 
-        mListView.setAdapter(mAdapter);
+        LinearLayoutManager llm = new LinearLayoutManager(mContext);
+        mRecycleView.setLayoutManager(llm);
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        for(String item : mList){
+            Person11 p = new Person11(item);
+            curriculumItemList.add(p);
+        }
 
-//                String item = (String) mAdapter.getItem(position);
-                TextView textView = (TextView) mAdapter.getItem(position);
-                String item = (String) textView.getText();
-//                if (item.equalsIgnoreCase("class 5") || item.equalsIgnoreCase("class 6")) {
-//                    mArrayAdapter.addAll(subjects);
-//                } else if (item.equalsIgnoreCase("sub 1") || item.equalsIgnoreCase("sub 2")) {
-//                    mArrayAdapter.addAll(units);
-//                } else if (item.equalsIgnoreCase("unit 1") || item.equalsIgnoreCase("unit 2")) {
-//                    mArrayAdapter.addAll(sections);
-//                } else if (item.equalsIgnoreCase("section 1") || item.equalsIgnoreCase("section 2")) {
-//                    mArrayAdapter.addAll(subSections);
-//                } else if (item.equalsIgnoreCase("sub-section 1") || item.equalsIgnoreCase("sub-section 2")) {
-//                    mArrayAdapter.addAll(topics);
-//                } else if (item.equalsIgnoreCase("topic 1")) {
-//                    mArrayAdapter.add(topic1);
-//                } else if (item.equalsIgnoreCase("topic 2")) {
-//                    mArrayAdapter.add(topic2);
+        mAdapter = new DoodleRecyclerViewAdapter<>(curriculumItemList);
+        mRecycleView.setAdapter(mAdapter);
+
+//        mRecycleView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+//
+////                String item = (String) mAdapter.getItem(position);
+//                TextView textView = (TextView) mAdapter.getItem(position);
+//                String item = (String) textView.getText();
+////                if (item.equalsIgnoreCase("class 5") || item.equalsIgnoreCase("class 6")) {
+////                    mArrayAdapter.addAll(subjects);
+////                } else if (item.equalsIgnoreCase("sub 1") || item.equalsIgnoreCase("sub 2")) {
+////                    mArrayAdapter.addAll(units);
+////                } else if (item.equalsIgnoreCase("unit 1") || item.equalsIgnoreCase("unit 2")) {
+////                    mArrayAdapter.addAll(sections);
+////                } else if (item.equalsIgnoreCase("section 1") || item.equalsIgnoreCase("section 2")) {
+////                    mArrayAdapter.addAll(subSections);
+////                } else if (item.equalsIgnoreCase("sub-section 1") || item.equalsIgnoreCase("sub-section 2")) {
+////                    mArrayAdapter.addAll(topics);
+////                } else if (item.equalsIgnoreCase("topic 1")) {
+////                    mArrayAdapter.add(topic1);
+////                } else if (item.equalsIgnoreCase("topic 2")) {
+////                    mArrayAdapter.add(topic2);
+////                }
+//                int size = dbHelper.getSize(uri);
+//                if (size < 5) {     // 5 = depth-1 of json tree class, sub, unit, section, sub-section, topic
+//                    mList = getChildList(item);
+////                    mAdapter.clear();
+////                    mAdapter.addAll(mList);
+//                    views.clear();
+//                    for (String ele : mList)
+//                        views.add(getTextView(ele));
+//                    mAdapter = new DynamicListAdapter(views, mContext);
 //                }
-                int size = dbHelper.getSize(uri);
-                if (size < 5) {     // 5 = depth-1 of json tree class, sub, unit, section, sub-section, topic
-                    mList = getChildList(item);
-//                    mAdapter.clear();
-//                    mAdapter.addAll(mList);
-                    views.clear();
-                    for (String ele : mList)
-                        views.add(getTextView(ele));
-                    mAdapter = new DynamicListAdapter(views, mContext);
+//            }
+//        });
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        Button saveButton = ViewProvider.getSimpleButton(mContext, "Save");
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1);
+        saveButton.setId(1);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // make each editText non editable
+                for (Person11 item : curriculumItemList) {
+                    item.isEditable(false);
                 }
             }
         });
 
-        ViewGroup frameLayout = (ViewGroup)rootView.findViewById(R.id.frame_layout_curriculum);     // the viewGroup is a frameLayout
-        frameLayout.addView(mListView);
+        Button addButton = ViewProvider.getSimpleButton(mContext, "Add");
+        params1.addRule(RelativeLayout.ABOVE, saveButton.getId());
+        addButton.setId(2);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //fetch list of items on basis of current uri
+                ArrayList<String> listOfItems = dbHelper.getItemsFromUri(uri);
+                Bundle args = new Bundle();
+                args.putStringArrayList("list",listOfItems);
 
-//        ((FrameLayout)rootView).addView(mListView);
+                CurriculumDialogFragment fragment = new CurriculumDialogFragment();
+                fragment.setArguments(args);
+                fragment.show(getFragmentManager(), "DialogAddItem");
+            }
+        });
+
+        Button editButton = ViewProvider.getSimpleButton(mContext, "Edit");
+        params2.addRule(RelativeLayout.ABOVE, addButton.getId());
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // make each editText editable
+                for (Person11 item : curriculumItemList) {
+                    item.isEditable(true);
+                }
+            }
+        });
+
+        RelativeLayout rl = ViewProvider.getRelativeLayout(mContext);
+        rl.addView(mRecycleView);
+        rl.addView(saveButton, params);
+        rl.addView(addButton, params1);
+        rl.addView(editButton, params2);
+
+        ViewGroup frameLayout = (ViewGroup)rootView.findViewById(R.id.frame_layout_curriculum);     // the viewGroup is a frameLayout
+        frameLayout.addView(rl);
+
+//        ((FrameLayout)rootView).addView(mRecycleView);
 
         return rootView;
     }
@@ -267,7 +346,7 @@ public class TeacherCurriculumFragment extends Fragment {
 //            String i = t3.substring(t3.indexOf("\"")+1);
 //            String j = i.substring(0, i.indexOf("\""));
 //            t3 = i.substring(i.indexOf("\"")+1);
-//            childList.add(j);
+//            childList.add(j);\
 //
 //            if(t3.indexOf("\"") == -1){
 //                break;
@@ -298,6 +377,7 @@ public class TeacherCurriculumFragment extends Fragment {
         public DataBaseHelper(){
 
         }
+        // returns the current items list
         public ArrayList<String> fetchList(String uri){
 
             noOfItems = getSize(uri);
@@ -351,6 +431,22 @@ public class TeacherCurriculumFragment extends Fragment {
             return count;
         }
 
+        public ArrayList<String> getItemsFromUri(String uri1){
+            // uri1 is named so, so that we should not modify member uri incidentally
+            ArrayList<String> items = new ArrayList<>();
+            int length = getSize(uri1);
+            if(length==0)
+                return null;
+            uri1 = uri1.substring(uri.indexOf("/")+1);
+
+            for(int i=0;i<length;i++){
+                String str1 = uri1.substring(0, uri1.indexOf("/"));
+                uri1 = uri1.substring(uri1.indexOf("/")+1);
+                items.add(str1);
+            }
+            return items;
+        }
+
     }
     public TextView getTextView(String text){
         TextView textView = new TextView(getActivity());
@@ -358,5 +454,93 @@ public class TeacherCurriculumFragment extends Fragment {
         textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         return textView;
+    }
+
+
+    public class Person11 extends DoodleRecylerViewSetter /*implements View.OnLongClickListener*/{
+        String text;
+        boolean editable;
+        EditText editText;
+
+        Person11(String str){
+            text = str;
+            editable = false;
+        }
+
+        @Override
+        protected void setViewChild(ViewGroup v) {
+//            final TextView textView = ViewProvider.getTextView(v.getContext(), text);
+//            textView.setTextSize(30);
+//            textView.setMinHeight(40);
+            editText = new EditText(v.getContext());
+            editText.setText(text);
+            editText.setFocusable(editable);
+//            editText.setKeyListener(null);
+
+            editText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (editable) {       // when edit text is being edited, disable onClick()
+                        return;
+                    }
+                    Toast.makeText(view.getContext(), ((TextView) view).getText(), Toast.LENGTH_LONG).show();
+                    String item = text;
+
+                    int size = dbHelper.getSize(uri);
+                    if (size < 5) {     // 5 = depth-1 of json tree class, sub, unit, section, sub-section, topic
+                        mList = getChildList(item);
+//                    mAdapter.clear();
+//                    mAdapter.addAll(mList);
+//                        views.clear();
+                        curriculumItemList.clear();
+                        for (String ele : mList) {
+//                            views.add(getTextView(ele));
+                            Person11 p = new Person11(ele);
+                            curriculumItemList.add(p);
+                        }
+//                        mAdapter = new DynamicListAdapter(views, mContext);
+                        mAdapter = new DoodleRecyclerViewAdapter<Person11>(curriculumItemList);
+                        mRecycleView.setAdapter(mAdapter);
+                    }
+                }
+            });
+
+            // disabling enter key, but it doesn't work yet
+            editText.setOnKeyListener(new View.OnKeyListener() {
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    // If the event is a key-down event on the "enter" button
+                    if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                        // Perform action on key press
+                        Toast.makeText(getActivity(), "Enter key pressed", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+//            editText.setOnLongClickListener(this);
+            v.addView(editText);
+        }
+
+        public void isEditable(Boolean editable){
+            this.editable = editable;
+            if(editable) {
+                editText.setClickable(false);       // for edit button
+                editText.setOnClickListener(null);
+            }
+            else {
+                editText.setClickable(true);        // for save button
+            }
+
+            mAdapter.notifyDataSetChanged();
+        }
+//        @Override
+//        public boolean onLongClick(View view) {
+//            Toast.makeText(view.getContext(), "Long click", Toast.LENGTH_SHORT).show();
+//            this.editable = true;
+//            mAdapter.notifyDataSetChanged();
+//            return false;
+//        }
+
     }
 }

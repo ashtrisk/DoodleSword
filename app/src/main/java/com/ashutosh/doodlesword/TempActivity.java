@@ -1,5 +1,6 @@
 package com.ashutosh.doodlesword;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,12 @@ public class TempActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+        //****************************EXTRA STUFF***********************
+//        Intent intent = new Intent(this, Attendance.class);
+//        startActivity(intent);
+        Intent intent = new Intent(this, TeacherCurriculum.class);
+        startActivity(intent);
+        //**************************************************************
         this.setRequestedOrientation(1);
         if(savedInstanceState == null) {
             frags = new ArrayList<>();

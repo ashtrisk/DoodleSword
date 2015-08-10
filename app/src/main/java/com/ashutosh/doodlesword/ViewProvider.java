@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -67,7 +68,7 @@ public class ViewProvider {
     public static Button getSimpleButton(Context context, String text){
         mButton = new Button(context);
         mButton.setText(text);
-//        mButton.setLayoutParams();
+        mButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         return mButton;
     }
 
@@ -134,5 +135,10 @@ public class ViewProvider {
         mEditText.setTextSize(maxHeight);
         return mEditText;
     }
+
+    public static CheckBox getCheckBox(Context context){
+        return new CheckBox(context);
+    }
+
 }
 
