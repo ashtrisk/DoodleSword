@@ -38,7 +38,7 @@ public class ParentActivityFragment extends Fragment {
         mContext = getActivity();
         mTextView = ViewProvider.getTextView(mContext,"Hello Parent!");
         // find listView set string array and add adapter to it.
-        parentListItems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.stud_list)));
+        //parentListItems = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.stud_lis)));
         mListView = (ListView) rootView.findViewById(R.id.listView_student);
 
         mListView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.list_item, R.id.list_item_textView, parentListItems));

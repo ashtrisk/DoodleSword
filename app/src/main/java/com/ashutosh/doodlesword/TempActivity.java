@@ -21,7 +21,7 @@ public class TempActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+        this.setTheme(android.R.style.Theme_DeviceDefault_NoActionBar_Fullscreen);
         this.setRequestedOrientation(1);
         if(savedInstanceState == null) {
             frags = new ArrayList<>();
@@ -58,7 +58,14 @@ public class TempActivity extends FragmentActivity {
             tsf.setArguments(args);
             frags.add(tsf);
         } else if(title.equalsIgnoreCase("teacher")){
+            TempTeacherFragment ttf = new TempTeacherFragment();
+            ttf.setArguments(args);
+            frags.add(ttf);
             // create teacher temp fragment
+        }else if (title.equalsIgnoreCase("management")){
+            TempManagementFragment msf = new TempManagementFragment();
+            msf.setArguments(args);
+            frags.add(msf);
         }
 
         mPagerAdapter.notifyDataSetChanged();
@@ -66,6 +73,6 @@ public class TempActivity extends FragmentActivity {
 
     public void addAndGotoPage(String s, String s1) {
         addPage(s,s1);
-        mViewPager.setCurrentItem(mPagerAdapter.getCount()-1);
+        mViewPager.setCurrentItem(mPagerAdapter.getCount() - 1);
     }
 }
