@@ -31,9 +31,9 @@ public class TempStudentFragment extends android.support.v4.app.Fragment{
 //        Toast.makeText(getActivity(), "Resume", Toast.LENGTH_SHORT).show();
 //    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Toast.makeText(getActivity(), "Pause", Toast.LENGTH_SHORT).show();
-    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        Toast.makeText(getActivity(), "Pause", Toast.LENGTH_SHORT).show();
+//    }
 }

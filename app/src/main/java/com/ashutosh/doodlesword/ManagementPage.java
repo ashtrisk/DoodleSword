@@ -2,26 +2,24 @@ package com.ashutosh.doodlesword;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Arrays;
 
 /**
- * Created by Vostro-Daily on 8/6/2015.
+ * Created by Satyender Yadav on 07-08-2015.
  */
-public class StudentPage {
+public class ManagementPage {
     View currView;
     Person[] studentListItems = {new Person("Goals"),new Person("Curriculum"),new Person("Performance"),new Person("Location"),new Person("Messaging")};
     //DynamicListAdapter dynamicListAdapter;
     DoodleRecyclerViewAdapter<Person> mAdapter;
 
-    StudentPage(Context ctx, Bundle args){
+    ManagementPage(Context ctx, Bundle args){
         // read arguments
         String username = args.getString("username");
 
