@@ -22,7 +22,8 @@ public class TempActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+//        this.setTheme(android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+        this.setTheme(android.R.style.Theme_Holo);
         //****************************EXTRA STUFF***********************
 //        Intent intent = new Intent(this, Attendance.class);
 //        startActivity(intent);
