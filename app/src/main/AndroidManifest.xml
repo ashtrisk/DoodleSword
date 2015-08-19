@@ -123,6 +123,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ashutosh.doodlesword.ParentActivity" />
         </activity>
+        <activity
+            android:name=".AssessStudentsActivity"
+            android:label="@string/title_activity_assess_students"
+            android:parentActivityName=".Assessment">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ashutosh.doodlesword.ParentActivity"/>
+        </activity>
+
     </application>
 
 </manifest>

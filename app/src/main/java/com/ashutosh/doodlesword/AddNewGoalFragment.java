@@ -1,61 +1,38 @@
 package com.ashutosh.doodlesword;
 
-import android.app.Activity;
+
+import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.net.Uri;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.FrameLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AddNewGoalFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link AddNewGoalFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class AddNewGoalFragment extends Fragment {
 
-    private ArrayList<String> placeholder_list;
-    private ListView mListView;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AddNewGoalFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AddNewGoalFragment newInstance(String param1, String param2) {
-        AddNewGoalFragment fragment = new AddNewGoalFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    private FrameLayout mFrameLayout;
+    private List<String> headerList;
+    private HashMap<String, List<String>> childList;
     public AddNewGoalFragment() {
         // Required empty public constructor
     }
@@ -63,10 +40,7 @@ public class AddNewGoalFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+//        setRetainInstance(true);
     }
 
     @Override
@@ -74,58 +48,188 @@ public class AddNewGoalFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_add_new_goal, container, false);
-        // get the placeholder_list from the string resources file.
-        // arrayList is used rather than a simple String array so that new items can be added and removed from it.
-        placeholder_list = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.placeholder_list)));
-        // find listView in the layout xml file
-        mListView = (ListView) rootView.findViewById(R.id.listView_new_goal);
-        // set Adapter to the listView
-        mListView.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.list_item_new_goal,
-                R.id.editText_new_goal, placeholder_list));
+        mFrameLayout = (FrameLayout)rootView.findViewById(R.id.frameLayout_add_goal);
 
-        //Button addButton = (Button) rootView.findViewById(R.id.button_add_field);
-        //addButton.setBackground(getActivity().getResources().getDrawable(R.drawable.buttonselector));
+        String [] classList = {"class 5", "class 6", "class 7"};
+        String [] subList = {"sub 1", "sub 2", "sub 3"};
+        String [] unitList = {"unit 1", "unit 2", "unit 3", "unit 4"};
+        String [] sectionList = {"section 1", "section 2", "section 3", "section 4"};
+        String [] subSectionList = {"sub-section 1", "sub-section 2", "sub-section 3", "sub-section 4"};
+        String [] topicList = {"topic 1","topic 2","topic 3","topic 4","topic 5"};
 
+        ArrayList<String[]> curriculumList = new ArrayList<>();
+        curriculumList.add(classList);
+        curriculumList.add(subList);
+        curriculumList.add(unitList);
+        curriculumList.add(sectionList);
+        curriculumList.add(subSectionList);
+        curriculumList.add(topicList);
+
+        Context ctx = getActivity();
+        RecyclerView rv = new RecyclerView(ctx);
+        LinearLayoutManager llm = new LinearLayoutManager(ctx);
+        rv.setLayoutManager(llm);
+
+        ArrayList<DoodleRecylerViewSetter> list = new ArrayList<>();
+
+        GoalItem item11 = new GoalItem("Goal Name", "editText");
+        list.add(item11);
+        GoalItem item22 = new GoalItem("Set Alarm", "checkBox");
+        list.add(item22);
+//        String [] content = {"class", "unit", "section", "sub-section"};
+//        GoalItem item33 = new GoalItem("Select Content", "spinner", content);
+//        list.add(item33);
+//        GoalItem item40 = new GoalItem("From", "datePickerSpinner");
+//        list.add(item40);
+
+//        for(String[] itemList : curriculumList){
+//            GoalItem item = new GoalItem("Select", "spinner", itemList);
+//            list.add(item);
+//        }
+        prepareList();      // called whenever we need an expandableListView
+        GoalItem itemX = new GoalItem("Select", "expandableListView", headerList, childList);
+        list.add(itemX);
+        GoalItem item44 = new GoalItem("Description", "multiLineText");
+        list.add(item44);
+        GoalItem itemLast = new GoalItem("UnsetAll");
+        list.add(itemLast);
+
+        DoodleRecyclerViewAdapter<DoodleRecylerViewSetter> adapter = new DoodleRecyclerViewAdapter<>(list);
+        rv.setAdapter(adapter);
+//        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+        mFrameLayout.addView(rv);
+
+//        if(savedInstanceState!=null){
+//            return null;
+//        }
         return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    public class GoalItem extends DoodleRecylerViewSetter {
+        String text;
+        String type;
+        String [] itemList;
+        List<String> listDataHeader;
+        HashMap<String, List<String>> listDataChild;
+
+        GoalItem(String str, String type, List<String> headerList, HashMap<String, List<String>> childList){
+            text = str;     this.type = type;
+            listDataHeader = headerList;
+            listDataChild = childList;
+        }
+        GoalItem(String str, String type, String [] list){
+            text = str;     this.type = type;       itemList = list;
+        }
+        GoalItem(String str, String type) {
+            this(str, type, null);
+        }
+        GoalItem(String str){
+            this(str, new String());
+        }
+
+        @Override
+        protected void setViewChild(ViewGroup v) {
+            final Context ctx = v.getContext();
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.height = 80;
+
+            if(type.equalsIgnoreCase("editText")){
+                EditText et = ViewProvider.getEditText(ctx, text);
+                et.setSingleLine();
+                et.setTextSize(30);
+                v.addView(et, params);
+            }else if(type.equalsIgnoreCase("checkBox")){
+                CheckBox checkBox = ViewProvider.getCheckBox(ctx);
+                checkBox.setTextSize(30);
+                checkBox.setHint(text);
+                v.addView(checkBox, params);
+            }else if(type.equalsIgnoreCase("spinner")){
+                final Spinner spinner = new Spinner(ctx);
+                ArrayList<View> views = new ArrayList<>();
+                for(String item : itemList){
+                    TextView tv = ViewProvider.getTextView(ctx, item);
+                    tv.setTextSize(30);
+                    views.add(tv);
+                }
+                final DynamicListAdapter adapter = new DynamicListAdapter(views, ctx);
+//                spinner.setPrompt("hello");
+                spinner.setEnabled(false);
+                spinner.setAdapter(adapter);
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+//                        Toast.makeText(ctx, adapterView.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        Toast.makeText(ctx, "Nothing selected", Toast.LENGTH_SHORT).show();
+                    }
+                });
+//                ViewGroup.LayoutParams paramsSp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//                paramsSp.height = 0;
+                v.addView(spinner, params);
+            }if(type.equalsIgnoreCase("multiLineText")){
+                EditText et = ViewProvider.getEditText(ctx, text);
+                et.setTextSize(30);
+                ViewGroup.LayoutParams paramsM = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                v.addView(et, paramsM);
+            }if(type.equalsIgnoreCase("datePickerSpinner")){
+                Spinner spinner = new Spinner(ctx);
+                DatePickerDialog pickerDialog = new DatePickerDialog(ctx, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+
+                    }
+                }, 1, 1, 1);
+                v.addView(spinner, params);
+            }if(type.equalsIgnoreCase("expandableListView")){
+                ExpandableListView expListView = new ExpandableListView(ctx);
+                DynamicExpandableListAdapter adapter = new DynamicExpandableListAdapter(ctx, listDataHeader, listDataChild);
+                expListView.setAdapter(adapter);
+                ViewGroup.LayoutParams paramsL = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                paramsL.height = 500;
+//                expListView.setMinimumHeight(500);
+
+                v.addView(expListView, paramsL);
+            }else{
+                TextView textView = ViewProvider.getTextView(ctx, text);
+                textView.setTextSize(30);
+                v.addView(textView, params);
+            }
+
+            ViewGroup.LayoutParams paramsV = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            v.setLayoutParams(paramsV);
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
+    // prepares header list and child list for expandable list view
+    public void prepareList(){
+        headerList = new ArrayList<String>();
+        childList = new HashMap<String, List<String>>();
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+        // Adding child data
+        headerList.add("Class");
+        headerList.add("Subject");
+        headerList.add("Unit");
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
+        // Adding child data
+        List<String> classList = new ArrayList<String>();
+        classList.add("The Shawshank Redemption");classList.add("The Godfather");classList.add("The Godfather: Part II");
+        classList.add("Pulp Fiction");classList.add("The Good, the Bad and the Ugly");classList.add("The Dark Knight");classList.add("12 Angry Men");
 
+        List<String> subList = new ArrayList<String>();
+        subList.add("The Conjuring");subList.add("Despicable Me 2");subList.add("Turbo");
+        subList.add("Grown Ups 2");subList.add("Red 2");subList.add("The Wolverine");
+
+        List<String> unitList = new ArrayList<String>();
+        unitList.add("2 Guns");unitList.add("The Smurfs 2");unitList.add("The Spectacular Now");
+        unitList.add("The Canyons");unitList.add("Europa Report");
+
+        childList.put(headerList.get(0), classList); // Header, Child data
+        childList.put(headerList.get(1), subList);
+        childList.put(headerList.get(2), unitList);
+
+    }
 }

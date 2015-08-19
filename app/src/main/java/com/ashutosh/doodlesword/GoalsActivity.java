@@ -7,11 +7,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 
-public class GoalsActivity extends ActionBarActivity implements AddNewGoalFragment.OnFragmentInteractionListener, GoalsTickerFragment.OnFragmentInteractionListener{
+public class GoalsActivity extends ActionBarActivity implements GoalsTickerFragment.OnFragmentInteractionListener{
 
+    private RelativeLayout mRelativeLayout;
     private ImageButton mImageButton;
 
     @Override
@@ -23,6 +26,7 @@ public class GoalsActivity extends ActionBarActivity implements AddNewGoalFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goals);
+        mRelativeLayout = (RelativeLayout)findViewById(R.id.relative_layout_goals);
 
         // get the current running fragment.
         Fragment fragment = getFragmentManager().findFragmentById(R.id.relative_layout_goals);
@@ -35,6 +39,7 @@ public class GoalsActivity extends ActionBarActivity implements AddNewGoalFragme
         // get the imageButton in the activity layout and set listener to it so that whenever it is clicked the default fragment is
         // replaced by a new ( add goals ) fragment.
 //        mImageButton = (ImageButton) findViewById(R.id.imageButton_goals);
+//        mImageButton = (ImageButton)findViewById(R.id.imageButton_goals);
         mImageButton = ViewProvider.getImageButton(this, R.drawable.ic_action_new);
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +50,12 @@ public class GoalsActivity extends ActionBarActivity implements AddNewGoalFragme
                 mImageButton.setVisibility(View.GONE);      // remove the image Button
             }
         });
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_END);
+
+        mRelativeLayout.addView(mImageButton, params);
     }
 
     @Override

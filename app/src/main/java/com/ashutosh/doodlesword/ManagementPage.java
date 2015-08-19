@@ -1,12 +1,15 @@
 package com.ashutosh.doodlesword;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Arrays;
 
@@ -15,9 +18,10 @@ import java.util.Arrays;
  */
 public class ManagementPage {
     View currView;
-    Person[] studentListItems = {new Person("Goals"),new Person("Curriculum"),new Person("Performance"),new Person("Location"),new Person("Messaging")};
+    Person14[] studentListItems = {new Person14("Goals"),new Person14("Curriculum"),new Person14("Assessment"),
+            new Person14("Attendance"),new Person14("Location"),new Person14("Messaging")};
     //DynamicListAdapter dynamicListAdapter;
-    DoodleRecyclerViewAdapter<Person> mAdapter;
+    DoodleRecyclerViewAdapter<Person14> mAdapter;
 
     ManagementPage(Context ctx, Bundle args){
         // read arguments
@@ -54,5 +58,45 @@ public class ManagementPage {
 
     public View getView(){
         return currView;
+    }
+
+    public class Person14 extends DoodleRecylerViewSetter{
+        String text;
+        Person14(String str){
+            text = str;
+        }
+        @Override
+        protected void setViewChild(ViewGroup v) {
+            TextView textView = new TextView(v.getContext());
+            textView.setText(text);
+            textView.setTextSize(50);
+            textView.setMinHeight(40);
+
+            textView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+//                    Toast.makeText(view.getContext(), ((TextView) view).getText(), Toast.LENGTH_LONG).show();
+                    if (text.equalsIgnoreCase("goals")) {
+                        Intent intent = new Intent(view.getContext(), GoalsActivity.class);
+                        view.getContext().startActivity(intent);
+                    } else if (text.equalsIgnoreCase("curriculum")) {
+                        Intent intent = new Intent(view.getContext(), TeacherCurriculum.class);
+                        view.getContext().startActivity(intent);
+                    } else if (text.equalsIgnoreCase("assessment")) {
+                        Intent intent = new Intent(view.getContext(), Assessment.class);
+                        view.getContext().startActivity(intent);
+                    } else if (text.equalsIgnoreCase("attendance")) {
+                        Intent intent = new Intent(view.getContext(), Attendance.class);
+                        view.getContext().startActivity(intent);
+                    } else if (text.equalsIgnoreCase("location")) {
+                        Intent intent = new Intent(view.getContext(), LocationActivity.class);
+                        view.getContext().startActivity(intent);
+                    } else if (text.equalsIgnoreCase("messaging")) {
+                        Toast.makeText(view.getContext(), ((TextView) view).getText(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            v.addView(textView);
+        }
     }
 }

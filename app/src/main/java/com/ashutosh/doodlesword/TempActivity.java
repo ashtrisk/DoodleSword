@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.CardView;
 import android.view.Display;
 import android.widget.FrameLayout;
 
@@ -26,9 +27,9 @@ public class TempActivity extends FragmentActivity {
         this.setTheme(android.R.style.Theme_Holo);
         //****************************EXTRA STUFF***********************
 //        Intent intent = new Intent(this, Attendance.class);
-//        startActivity(intent);
-        Intent intent = new Intent(this, TeacherCurriculum.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, TeacherCurriculum.class);
+//        startActivity(new Intent(this, Assessment.class));
+//        startActivity(new Intent(this, GoalsActivity.class));
         //**************************************************************
         this.setRequestedOrientation(1);
         if(savedInstanceState == null) {
@@ -67,6 +68,13 @@ public class TempActivity extends FragmentActivity {
             frags.add(tsf);
         } else if(title.equalsIgnoreCase("teacher")){
             // create teacher temp fragment
+            TempTeacherFragment ttf = new TempTeacherFragment();
+            ttf.setArguments(args);
+            frags.add(ttf);
+        } else if(title.equalsIgnoreCase(("management"))){
+            TempManagementFragment tmf = new TempManagementFragment();
+            tmf.setArguments(args);
+            frags.add(tmf);
         }
 
         mPagerAdapter.notifyDataSetChanged();

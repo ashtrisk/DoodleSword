@@ -26,7 +26,7 @@ public class ViewProvider {
     public static TextView mTextView;
     public  static Button mButton;
     public static ImageButton mImageButton;
-    public static final String[][] user_data= { {"saty","yad","management","1"} , {"trina","das","teacher","2"} , {"ashu","chamoli","student","3"}};
+    public static final String[][] user_data= { {"saty","yad","teacher","1"} , {"trina","das","management","2"} , {"ashu","chamoli","student","3"}};
 
     public static String[] getUser(String username,String password){
         for (String[] item:user_data){
@@ -95,6 +95,12 @@ public class ViewProvider {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static EditText getEditText(Context context, String placeholder){
+        EditText et = new EditText(context);
+        et.setHint(placeholder);
+        return et;
     }
 
     public static EditText getEditText(Context context,String placeholder,int minWidth,int minHeight,int maxWidth,int maxHeight,ViewGroup.LayoutParams params){
